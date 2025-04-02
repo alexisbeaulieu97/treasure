@@ -1,25 +1,14 @@
+# utils/password.py
+import sys
 from getpass import getpass
 
 
-def create_password(password_type, max_retries=3):
-    password = ''
-    password_verif = ''
-    retry_count = 1
-    while True:
-        password = getpass(f'Create a {password_type} password: ')
-        password_verif = getpass(f'Re-enter {password_type} password: ')
-        if password != password_verif:
-            print(
-                f'Provided passwords were different... ({retry_count}/{max_retries})')
-            retry_count = retry_count + 1
-        else:
-            break
-        if retry_count > max_retries:
-            print(f'Failed to create {password_type} password, exiting...')
-            exit()
+def get_password(prompt_message: str = "Enter password") -> str:
+    """Securely prompts the user for a password."""
+    # Added a default prompt, allow customization
+    password = getpass(f"{prompt_message}: ")
+    if not password:
+        # Handle empty password input if necessary, e.g., raise error or re-prompt
+        # For now, allowing empty password, though maybe not advisable.
+        print("Warning: Empty password entered.", file=sys.stderr)
     return password
-
-
-def get_password(password_type=None):
-    password_type = password_type or 'your'
-    return getpass(f'Enter {password_type} password: ')
